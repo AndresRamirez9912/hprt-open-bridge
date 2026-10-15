@@ -1,0 +1,34 @@
+app:
+  name: photo-print-bridge
+  env: development
+  rest_addr: 127.0.0.1:8787
+  shutdown_timeout: 10s
+
+logger:
+  level: info # debug also prints every protocol line
+  as_json: false
+  no_color: false
+
+cors:
+  enabled: true
+  allowed_origins: ["*"]
+  allowed_methods: [GET, POST, OPTIONS]
+  allowed_headers: [Content-Type, X-Request-ID]
+
+printer:
+  # Network ports of the printer; only change them to talk to a simulator
+  data_port: 9100
+  command_port: 9901
+  discovery_port: 6000
+  wake_window: 45s
+  heartbeat_interval: 3s
+  heartbeat_timeout: 20s
+  claim_timeout: 15s
+  print_timeout: 240s
+  send_stall: 120s
+  silent_print_done: 90s
+  reconnect_pause: 5s
+  retry_wait: 90s
+
+activity:
+  log_buffer: 200

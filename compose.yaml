@@ -1,0 +1,20 @@
+services:
+  bridge:
+    build: .
+    image: photo-print-bridge:latest
+    # Host network: the UDP discovery broadcast and the printer on the LAN are not reachable through Docker NAT
+    network_mode: host
+    env_file:
+      - path: .env
+        required: false
+    environment:
+      BRIDGE_APP_REST_ADDR: ${BRIDGE_APP_REST_ADDR:-0.0.0.0:8787}
+    volumes:
+      - ./config.yaml:/app/config.yaml:ro
+      # nmcli talks to the NetworkManager of the host for the Wi-Fi diagnostics
+      - /run/dbus/system_bus_socket:/run/dbus/system_bus_socket
+    security_opt:
+      # The default AppArmor profile of Docker blocks D-Bus; remove this line (and the volume above)
+      # if you do not need /api/link Wi-Fi data, /api/gateway in hotspot mode or /api/wifi/scan
+      - apparmor:unconfined
+    restart: unless-stopped
